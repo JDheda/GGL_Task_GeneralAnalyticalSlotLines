@@ -39,12 +39,13 @@ namespace Calculator
 
             int[] nRows = { 3, 3, 3, 3, 3 };
             int nCols = nRows.Length;
-            int nPayLines = 40;
-            double coinsPerLine = 0.5;
+            int nPayLines = 20;
+            double coinsPerLine = 1;
 
             bool[] freeSpins = { false };
             int[] freeSpinTrigger = { 3 };
             bool scatter = true;
+            bool bonus = true;
             int[] nFreeSpins = { 0 };
             bool[] freeSpinRetrigger = { false };
             bool wild = true;
@@ -53,30 +54,34 @@ namespace Calculator
             double mixedWildSubMultiplier = 1;
 
             string[] reelXSymbols = { "High1", "High2", "High3", "High4", "Low1", "Low2", "Low3", "Low4" };
-            string[] reelWSymbols = { "Wild1" };
-            string[] reelSSymbols = { "Scatter1" };
+            string[] reelWSymbols = { "Wild" };
+            string[] reelSSymbols = { "Scatter" };
+            string[] reelBSymbols = { "Bonus1", "Bonus2" };
 
             // gets transposed. defined this way because of length
             double[,] payXTable = { { 0, 0, 0, 0, 0, 0, 0, 0 },
                                     { 0, 0, 0, 0, 0, 0, 0, 0 },
-                                    { 20, 20, 15, 10, 2, 2, 2, 2 },
-                                    { 60, 45, 25, 20, 15, 10, 5, 5 },
-                                    { 125, 90, 60, 50, 40, 30, 20, 20 } };
+                                    { 20, 18, 16, 14, 10, 8, 7, 6 },
+                                    { 40, 36, 32, 28, 20, 16, 14, 12 },
+                                    { 120, 108, 96, 84, 60, 48, 42, 36 } };
 
             // do not transpose
-            double[,] payWTable = { { 0, 0, 30, 150, 2500 } };
+            double[,] payWTable = { { 0, 10, 50, 300, 5000 } };
 
             // make this one a vector
-            double[] payWMixedTable = { 0, 0, 60, 300, 5000 };
+            double[] payWMixedTable = { 0, 0, 0, 0, 0 };
 
             // do not transpose
-            double[,] paySTable = { { 0, 0, 2, 50, 500 } };
+            double[,] paySTable = { { 0, 0, 5, 20, 600 } };
 
-            string[] reel1 = { "Wild1", "Wild1", "Wild1", "Low3", "Low3", "High1", "Low4", "Low4", "High2", "Low3", "Low3", "Scatter1", "Low4", "Low4", "High3", "Low1", "Low1", "Low2", "Low2", "High4", "Low3", "Low3", "Low4", "Low4", "Low4", "High1", "Low3", "High1", "Low4", "Low4", "Low4", "Low1", "Low1", "Low2", "Low2", "High3", "Low3", "Low3", "High2", "Low4", "High2", "Low3", "Low3", "Low3", "High4", "Low4", "Low4", "Low1", "Low1", "Low2", "Low2", "Low3", "High3", "High4", "High4" };
-            string[] reel2 = { "Wild1", "Wild1", "Wild1", "High1", "Low1", "Low1", "High2", "Low2", "Low2", "High1", "Low1", "Scatter1", "Low2", "Low2", "High2", "Low3", "Low3", "Low3", "Low4", "Low4", "Low4", "High3", "Low1", "Low1", "High4", "High2", "Low2", "High1", "Low1", "High3", "Low2", "Low2", "High4", "Low3", "Low3", "Low3", "Low4", "Low4", "Low4", "Low1", "Low3", "Low4", "High3", "High4", "Low2" };
-            string[] reel3 = { "Wild1", "Wild1", "Wild1", "High1", "Low4", "High3", "Low2", "High2", "Low3", "High4", "Low1", "Scatter1", "Low1", "High4", "Low3", "High2", "Low2", "High3", "Low4", "High1", "Scatter", "High2", "Low2", "High4", "Low4", "High1", "Low1", "High3", "Low3", "High1", "High2", "High3", "High4" };
-            string[] reel4 = { "Wild1", "Wild1", "Wild1", "High3", "High3", "High4", "High4", "Scatter1", "High3", "High4", "High4", "High1", "High1", "High2", "High2", "Scatter1", "High3", "High3", "High4", "High4", "High1", "High2", "Low1", "Low3", "Low2", "Low4", "Scatter", "Low4", "Low3", "Low2", "Low1", "Low1", "Low2", "Low3", "Low4", "High3" };
-            string[] reel5 = { "Wild1", "Wild1", "Wild1", "High1", "High1", "High2", "High2", "Scatter1", "High1", "High2", "High2", "High3", "High4", "High3", "High4", "Scatter1", "Low1", "High3", "Low2", "Low4", "High4", "Low3", "Low2", "Low1", "Scatter1", "High1", "Low4", "High3", "High4", "Low3", "Low1", "Low2", "Low3", "Low4" };
+            // initial is for 0 bonuses
+            double[,] payBTable = { { 0, 1, 2, 4, 8, 16, 32, 64, 128, 256 }, { 0, 2, 4, 8, 16, 32, 64, 128, 256, 512 } };
+
+            string[] reel1 = { "Wild", "Wild", "Wild", "High1", "High1", "High1", "Low4", "Low4", "Low4", "Bonus1", "Bonus1", "High2", "High2", "High2", "Low3", "Low3", "Low3", "High3", "High3", "High3", "Scatter", "Low2", "Low2", "Low2", "High4", "High4", "High4", "Bonus2", "Low1", "Low1", "Low1", "High1", "High1", "High1", "High3", "High3", "High3", "Low2", "Low2", "Low2", "Low4", "Low4", "Low4" };
+            string[] reel2 = { "Wild", "Wild", "Wild", "Low1", "Low1", "Low1", "High4", "High4", "High4", "Bonus1", "Low2", "Low2", "Low2", "High3", "High3", "High3", "Low3", "Low3", "Low3", "Scatter", "High2", "High2", "High2", "Low1", "Low1", "Low1", "Bonus2", "High1", "High1", "High1", "High2", "High2", "High2", "High4", "High4", "High4", "Low3", "Low3", "Low3", "Low4", "Low4", "Low4" };
+            string[] reel3 = { "Wild", "Wild", "Wild", "High1", "High1", "High1", "Low4", "Low4", "Low4", "Bonus1", "High2", "High2", "High2", "Scatter", "Low3", "Low3", "Low3", "High3", "High3", "High3", "Scatter", "Low2", "Low2", "Low2", "Bonus2", "High4", "High4", "High4", "Low1", "Low1", "Low1", "Low4", "Low4", "Low4", "Low2", "Low2", "Low2", "Low4", "Low4", "Low4", "Low2", "Low2", "Low2" };
+            string[] reel4 = { "Wild", "Wild", "Wild", "Low1", "Low1", "Low1", "High4", "High4", "High4", "Bonus1", "Low2", "Low2", "Low2", "High3", "High3", "High3", "Low3", "Low3", "Low3", "Scatter", "High2", "High2", "High2", "Low1", "Low1", "Low1", "Bonus2", "High1", "High1", "High1", "Scatter", "High2", "High2", "High2", "High4", "High4", "High4", "Low3", "Low3", "Low3", "Low4", "Low4", "Low4" };
+            string[] reel5 = { "Wild", "Wild", "Wild", "Wild", "Low1", "Low1", "Low1", "High4", "High4", "High4", "Bonus1", "Bonus1", "Scatter", "Low2", "Low2", "Low2", "High3", "High3", "High3", "Low3", "Low3", "Low3", "Scatter", "High2", "High2", "High2", "Bonus2", "Low4", "Low4", "Low4", "High1", "High1", "High1", "Scatter", "High3", "High3", "High3", "High1", "High1", "High1" };
 
             string[][] reels = { reel1, reel2, reel3, reel4, reel5 };
             int[] nReel = ReelTotals(reels);
@@ -85,11 +90,13 @@ namespace Calculator
             /*                                                Main Calculations                                                   */
             /* ================================================================================================================== */
 
+            string[][] virtualReels = ExpandColumns(reels, nRows);
             Vector<double> nRowsVec = Vector<double>.Build.DenseOfArray(nRows.Select(x => (double)x).ToArray());
             double betCost = nPayLines * coinsPerLine;
             int nXSymbols = reelXSymbols.Length;
             int nWSymbols = reelWSymbols.Length;
             int nSSymbols = reelSSymbols.Length;
+            int nBSyambols = reelBSymbols.Length;
             Matrix<double> payXMat = Matrix<double>.Build.DenseOfArray(payXTable).Transpose();
             int R = payXMat.RowCount;
             int C = payXMat.ColumnCount;
@@ -101,14 +108,16 @@ namespace Calculator
             Matrix<double> nXInReel = HowManyOfEachSymbolInReel(reelXSymbols, reels);
             Matrix<double> nWInReel = HowManyOfEachSymbolInReel(reelWSymbols, reels);
             Matrix<double> nSInReel = HowManyOfEachSymbolInReel(reelSSymbols, reels);
+            Matrix<double> nBInReel = HowManyOfEachSymbolInReel(reelBSymbols, reels);
             Console.WriteLine("nWInReel: " + nWInReel);
             Console.WriteLine("nXInReel: " + nXInReel);
             Console.WriteLine("nSInReel: " + nSInReel);
+            Console.WriteLine("nBInReel: " + nBInReel);
 
             Matrix<double> xStreakWithoutWSub = XStreakWithoutWildSub(nXInReel, nWInReel, nSInReel, nReel, wild);
             // Matrix<double> wStreakWithoutWSub = WStreakWithoutWildSub(nWInReel, nSInReel, nReel, scatter, mixedWild);
-            Matrix<double> wPureTypeStreakWithoutWSub = WPureTypeStreakWithoutWildSub(nWInReel, nSInReel, nReel, scatter);
-            Vector<double> wMixedStreakWithoutWSub = WMixedStreakWithoutWildSub(nWInReel, nSInReel, nReel, scatter);
+            Matrix<double> wPureTypeStreakWithoutWSub = WPureTypeStreakWithoutWildSub(nWInReel, nSInReel, nBInReel, nReel, scatter, bonus);
+            Vector<double> wMixedStreakWithoutWSub = WMixedStreakWithoutWildSub(nWInReel, nSInReel, nBInReel, nReel, scatter, bonus);
             Matrix<double> xStreakWithWSub = XStreakWithWildSub(nXInReel, nWInReel, nSInReel, nReel, wild);
             Matrix<double> xFollowsWStreak = XFollowsWStreak(nXInReel, nWInReel, nSInReel, nReel, wild);
             // Matrix<double> xFollowsPureW1Streak = XFollowsPureWStreak(nXInReel, nWInReel, nSInReel, nReel, wild, 0);
@@ -386,11 +395,18 @@ namespace Calculator
             double ScatterPay = ScatterPayMat.RowSums().Sum();
             Console.WriteLine("RTP_Scatter: " + ScatterPay);
 
+            // Bonus Pay -----------------------
+            double[] BonusPay = EvaluateAllBonusSymbols(reelBSymbols, payBTable, reels, nRows);
+
+            for (int i = 0; i < reelBSymbols.Length; i++)
+                Console.WriteLine($"{reelBSymbols[i]} RTP = {BonusPay[i]:F6}");
+
+            double BonusPayTotal = BonusPay.Sum();
 
             // RTP -----------------------------
             double RTP_BaseGame = (PureWildPay + MixedWildPay + SymbolsPayVec.Sum()) / coinsPerLine;
             //Console.WriteLine("RTP_BaseGame: " + RTP_BaseGame);
-            RTP_BaseGame = RTP_BaseGame + ScatterPay;
+            RTP_BaseGame = RTP_BaseGame + ScatterPay + BonusPayTotal;
             Console.WriteLine("RTP_BaseGame: " + RTP_BaseGame);
 
             // Free Spin RTP Calcs -------------
@@ -569,7 +585,7 @@ namespace Calculator
             }
             return result;
         }*/
-        static Matrix<double> WPureTypeStreakWithoutWildSub(Matrix<double> nWInReel, Matrix<double> nSInReel, int[] nReel, bool scatter)
+        static Matrix<double> WPureTypeStreakWithoutWildSub(Matrix<double> nWInReel, Matrix<double> nSInReel, Matrix<double> nBInReel, int[] nReel, bool scatter, bool bonus)
         {
             int R = nWInReel.RowCount;
             int C = nWInReel.ColumnCount;
@@ -587,11 +603,19 @@ namespace Calculator
                 if (c < C - 1)
                 {
                     int i = c + 1;
-                    if (scatter)
+                    if (scatter && !bonus)
                     {
                         vec1 = vec1.PointwiseMultiply((vec0 + nSInReel.Column(i).Sum()) / nReel[i]);
                     }
-                    else // (!scatter)
+                    else if (bonus && !scatter)
+                    {
+                        vec1 = vec1.PointwiseMultiply((vec0 + nBInReel.Column(i).Sum()) / nReel[i]);
+                    }
+                    else if (scatter && bonus)
+                    {
+                        vec1 = vec1.PointwiseMultiply((vec0 + nSInReel.Column(i).Sum() + nBInReel.Column(i).Sum()) / nReel[i]);
+                    }
+                    else // (!scatter && !bonus)
                     {
                         vec1 = Vector<double>.Build.Dense(R, 0.0);
                     }
@@ -601,7 +625,7 @@ namespace Calculator
             }
             return result;
         }
-        static Vector<double> WMixedStreakWithoutWildSub(Matrix<double> nWInReel, Matrix<double> nSInReel, int[] nReel, bool scatter)
+        static Vector<double> WMixedStreakWithoutWildSub(Matrix<double> nWInReel, Matrix<double> nSInReel, Matrix<double> nBInReel, int[] nReel, bool scatter, bool bonus)
         {
             int R = nWInReel.RowCount;
             int C = nWInReel.ColumnCount;
@@ -618,9 +642,17 @@ namespace Calculator
                 if (c < C - 1)
                 {
                     int i = c + 1;
-                    if (scatter)
+                    if (scatter && bonus)
                     {
-                        scal1 = scal1 * (nSInReel.Column(i).Sum() / nReel[i]);
+                        scal1 = scal1 * (nSInReel.Column(i).Sum() + nBInReel.Column(i).Sum()) / nReel[i];
+                    }
+                    else if (scatter && !bonus)
+                    {
+                        scal1 = scal1 * (nSInReel.Column(i).Sum()) / nReel[i];
+                    }
+                    else if (bonus && !scatter)
+                    {
+                        scal1 = scal1 * (nBInReel.Column(i).Sum()) / nReel[i];
                     }
                     else // (!scatter)
                     {
@@ -1180,6 +1212,292 @@ namespace Calculator
                 }
             }
             return matStorage;
+        }
+        static string[][] ExpandColumns(string[][] reels, int[] extra)
+        {
+            int rows = reels.Length;
+
+            // Use LINQ to create the new jagged array
+            string[][] result = Enumerable.Range(0, rows)
+                .Select(row => Enumerable.Range(0, reels[row].Length + extra[row] - 1)
+                    .Select(col => reels[row][col % reels[row].Length])
+                    .ToArray())
+                .ToArray();
+
+            return result;
+        }
+        static int[][] OnScreenBonusCount(string[][] virtualReels, int[] nRows, string reelBSymbol)
+        {
+            int nReels = virtualReels.Length;
+            int[][] result = new int[nReels][];
+
+            for (int c = 0; c < nReels; c++)
+            {
+                // original strip length before you padded it with (nRows[c]-1) symbols
+                int originalLen = virtualReels[c].Length - nRows[c] + 1;
+                result[c] = new int[originalLen];
+
+                for (int start = 0; start < originalLen; start++)
+                {
+                    int count = 0;
+                    for (int offset = 0; offset < nRows[c]; offset++)
+                    {
+                        if (virtualReels[c][start + offset] == reelBSymbol)
+                            count++;
+                    }
+                    result[c][start] = count;
+                }
+            }
+            return result;
+        }
+        static int[][] BuildBonusRangePerReel(int[] nRows)
+        {
+            if (nRows == null)
+                throw new ArgumentNullException(nameof(nRows));
+
+            int[][] result = new int[nRows.Length][];
+
+            for (int i = 0; i < nRows.Length; i++)
+            {
+                int max = nRows[i];               // maximum bonus symbols on reel i
+                result[i] = new int[max + 1];     // include 0, so length = max+1
+
+                for (int k = 0; k <= max; k++)
+                    result[i][k] = k;             // {0,1,2,…,max}
+            }
+
+            return result;
+        }
+        static int[][] HistogramBonusCounts(int[][] bonusCounts, int[] nRows)
+        {
+            if (bonusCounts == null) throw new ArgumentNullException(nameof(bonusCounts));
+            if (nRows == null) throw new ArgumentNullException(nameof(nRows));
+            if (bonusCounts.Length != nRows.Length)
+                throw new ArgumentException("bonusCounts and nRows must have same length.");
+
+            int reels = bonusCounts.Length;
+            int[][] result = new int[reels][];
+
+            for (int r = 0; r < reels; r++)
+            {
+                int max = nRows[r];                 // maximum possible bonus symbols on reel r
+                int[] hist = new int[max + 1];      // 0..max
+                foreach (int val in bonusCounts[r])
+                {
+                    if (val < 0 || val > max)
+                        throw new InvalidOperationException($"Unexpected count {val} on reel {r}");
+                    hist[val]++;                    // tally
+                }
+                result[r] = hist;
+            }
+
+            return result;
+        }
+        static int[,] CartesianProduct(int[][] ranges)
+        {
+            if (ranges == null || ranges.Length == 0)
+                return new int[0, 0];
+
+            int reels = ranges.Length;
+            long rowsLong = 1;
+            foreach (var col in ranges)
+                rowsLong *= col.Length;
+
+            if (rowsLong > int.MaxValue)
+                throw new OverflowException("Too many combinations for a single int[,]");
+
+            int rows = (int)rowsLong;
+            int[,] result = new int[rows, reels];
+
+            // iterative mixed-radix counter
+            int[] counters = new int[reels];
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int r = 0; r < reels; r++)
+                    result[row, r] = ranges[r][counters[r]];
+
+                // increment counters (right-most digit first)
+                for (int r = reels - 1; r >= 0; r--)
+                {
+                    counters[r]++;
+                    if (counters[r] < ranges[r].Length) break;
+                    counters[r] = 0; // carry
+                }
+            }
+            return result;
+        }
+
+        static int[,] MapCombosToHistogram(int[][] bonusHistogram, int[,] combos)
+        {
+            int rows = combos.GetLength(0);
+            int reels = combos.GetLength(1);
+
+            int[,] result = new int[rows, reels];
+
+            for (int i = 0; i < rows; i++)
+                for (int r = 0; r < reels; r++)
+                {
+                    int bonusCount = combos[i, r];
+                    result[i, r] = bonusHistogram[r][bonusCount];   // axis order: reel,bonus
+                }
+
+            return result;
+        }
+
+        static int[,] MaskCombosByHistogram(int[][] bonusHistogram, int[,] combos)
+        {
+            int rows = combos.GetLength(0);
+            int reels = combos.GetLength(1);
+
+            int[,] masked = new int[rows, reels];
+
+            for (int i = 0; i < rows; i++)
+                for (int r = 0; r < reels; r++)
+                {
+                    int bonusCount = combos[i, r];
+                    int histValue = bonusHistogram[r][bonusCount];
+
+                    masked[i, r] = (histValue == 0) ? 0 : bonusCount;
+                }
+
+            return masked;
+        }
+        public static int[] RowSums(int[,] source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            int rows = source.GetLength(0);
+            int cols = source.GetLength(1);
+
+            int[] result = new int[rows];
+
+            for (int i = 0; i < rows; i++)
+            {
+                int sum = 0;
+                for (int j = 0; j < cols; j++)
+                    sum += source[i, j];
+                result[i] = sum;
+            }
+            return result;
+        }
+        public static int[] RowProducts(int[,] source)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+
+            int rows = source.GetLength(0);
+            int cols = source.GetLength(1);
+
+            int[] result = new int[rows];
+
+            for (int i = 0; i < rows; i++)
+            {
+                int prod = 1;
+                for (int j = 0; j < cols; j++)
+                    prod *= source[i, j];
+                result[i] = prod;
+            }
+            return result;
+        }
+        public static int Product(int[] source)
+        {
+            int prod = 1;
+            for (int i = 0; i < source.Length; i++)
+            {
+                prod *= source[i];
+            }
+            return prod;
+        }
+        public static int[,] GroupAndSumToArray(int[] rowKeys, int[] values)
+        {
+            if (rowKeys.Length != values.Length)
+                throw new ArgumentException("rowKeys and values must be the same length.");
+
+            Dictionary<int, int> grouped = new Dictionary<int, int>();
+
+            for (int i = 0; i < rowKeys.Length; i++)
+            {
+                int key = rowKeys[i];
+                int val = values[i];
+
+                if (!grouped.ContainsKey(key))
+                    grouped[key] = 0;
+
+                grouped[key] += val;
+            }
+
+            // Convert to int[,]
+            int rows = grouped.Count;
+            int[,] result = new int[rows, 2];
+
+            int index = 0;
+            foreach (var kvp in grouped.OrderBy(k => k.Key))
+            {
+                result[index, 0] = kvp.Key;   // unique row sum
+                result[index, 1] = kvp.Value; // total value
+                index++;
+            }
+
+            return result;
+        }
+
+        static double[] ScaleAndPay(int[,] uniqueSumGrid, int cycleTotal, double[] payVector)
+        {
+            if (cycleTotal == 0) throw new DivideByZeroException(nameof(cycleTotal));
+
+            int rows = uniqueSumGrid.GetLength(0);
+            int cols = payVector.Length;
+
+            // truncate from the END if payout vector is longer
+            int len = Math.Min(rows, cols);
+            double[] result = new double[len];
+
+            for (int i = 0; i < len; i++)
+            {
+                double prob = uniqueSumGrid[i, 1] / (double)cycleTotal;
+                result[i] = prob * payVector[i];
+            }
+            return result;
+        }
+
+        static double[] EvaluateAllBonusSymbols(
+        string[] bonusSymbols,
+        double[,] payBTable,
+        string[][] reels,
+        int[] nRows)
+        {
+            string[][] virtualReels = ExpandColumns(reels, nRows);
+            int[][] bonusRanges = BuildBonusRangePerReel(nRows);
+            int[,] combos = CartesianProduct(bonusRanges);
+            int nBonusTypes = bonusSymbols.Length;
+            double[] rtpPerBonus = new double[nBonusTypes];
+
+            for (int b = 0; b < nBonusTypes; b++)
+            {
+                string bonusSym = bonusSymbols[b];
+
+                // -------- single-symbol pass --------
+                int[][] bonusPerStop = OnScreenBonusCount(virtualReels, nRows, bonusSym);
+                int[][] bonusHistograms = HistogramBonusCounts(bonusPerStop, nRows);
+                int[,] mapped = MapCombosToHistogram(bonusHistograms, combos);
+                int[,] maskedCombos = MaskCombosByHistogram(bonusHistograms, combos);
+                int[] rowTotals = RowSums(maskedCombos);
+                int[] rowProducts = RowProducts(mapped);
+                int[,] uniqueSumGrid = GroupAndSumToArray(rowTotals, rowProducts);
+
+                int cycleTotal = Product(reels.Select(r => r.Length).ToArray());
+
+                // --- grab the payout row for this symbol and compute RTP
+                int payCols = payBTable.GetLength(1);
+                double[] payVector = new double[payCols];
+                for (int c = 0; c < payCols; c++)
+                    payVector[c] = payBTable[b, c];
+
+                double[] rtps = ScaleAndPay(uniqueSumGrid, cycleTotal, payVector);
+                rtpPerBonus[b] = rtps.Sum();
+            }
+
+            return rtpPerBonus;   // one RTP value per bonus type
         }
     }
 }
